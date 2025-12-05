@@ -1,0 +1,95 @@
+01_schema_setup.md – Database Schema Creation
+Project: Retail Product & Sales Analytics (PostgreSQL Setup)
+
+This document describes the initial database schema setup used for importing and organizing the raw datasets for the project.
+
+1. Schema Creation
+
+A dedicated schema was created in PostgreSQL to keep all project tables grouped together:
+
+CREATE SCHEMA finance;
+
+
+All tables were imported into this schema using pgAdmin → Import/Export.
+
+2. Imported Tables
+
+The following raw datasets were imported:
+
+1. sale_report
+
+Columns:
+index, SKU Code, Design No., Stock, Category, Size, Color
+
+2. pl_march_2021
+
+Columns:
+index, Sku, Style Id, Catalog, Category, Weight,
+TP 1, TP 2, MRP Old, Final MRP Old, Ajio MRP, Amazon MRP,
+Amazon FBA MRP, Flipkart MRP, Limeroad MRP, Myntra MRP,
+Paytm MRP, Snapdeal MRP
+
+3. may_2022
+
+Columns:
+Same structure as pl_march_2021, plus TP
+
+4. international_sale_report
+
+Columns:
+index, DATE, Months, CUSTOMER, Style, SKU, Size, PCS, RATE, GROSS AMT
+
+5. expense_iigf
+
+Columns:
+index, Received Amount, Expance, plus unnamed columns
+
+6. cloud_warehouse_comparison
+
+Columns:
+index, Shiprocket, INCREFF, plus unnamed columns
+
+7. amazon_sale_report
+
+Columns:
+Many order-level fields including:
+Order ID, Date, Status, Fulfilment, Style, SKU, Category,
+Qty, Amount, ship-country, fulfilled-by, etc.
+
+3. Data Type Observations
+
+During import:
+
+Most columns were loaded as TEXT, even when numeric.
+
+Some columns contained mixed values (numbers + text), which prevented clean casting.
+
+Several tables had unexpected unnamed columns.
+
+index appeared in all tables but is not a reliable primary key.
+
+At this stage, no primary keys or foreign keys were created, because the raw data requires cleaning first.
+
+4. ERD Placeholder
+
+An Entity Relationship Diagram will be included after:
+
+column standardization
+
+duplicate removal
+
+cleaning SKU values
+
+identifying proper primary keys
+
+(Insert ERD screenshot here once ready)
+
+5. Next Steps
+
+Clean and standardize key columns (especially SKU).
+
+Identify unique rows and create meaningful primary keys.
+
+Build master product table.
+
+Create foreign keys and generate the ERD.
