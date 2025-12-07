@@ -1,0 +1,21 @@
+# Product Dimension Table
+
+This step focuses on creating a clean `dim_product` table from raw sales data.
+
+## Process
+- Built a staging table (`stg_product`) from the Sale Report dataset
+- Standardized text formats (SKU, Design No, Size, Category, Color)
+- Removed null SKUs
+- Removed duplicate records
+- Generated a surrogate key using `ROW_NUMBER()`
+
+## Output Table
+`finance.dim_product`
+
+Columns:
+- product_id
+- sku
+- design_no
+- category
+- size
+- color
