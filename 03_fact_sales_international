@@ -1,0 +1,39 @@
+# International Sales Fact Table
+
+This step focuses on transforming the raw *International sale report* dataset into a clean fact table for analysis.
+
+## Objective
+- Standardize date, SKU, size, and customer fields  
+- Convert PCS, RATE, and GROSS AMT into numeric types  
+- Remove invalid or non-numeric rows  
+- Prepare the data for joining with dimensions (product, customer)
+
+## Process Summary
+
+### 1. Staging Table (`stg_international_sales`)
+Performed the following transformations:
+- Converted `DATE` to SQL `DATE` type  
+- Cleaned & standardized text fields (SKU, customer, size)  
+- Filtered valid numeric rows  
+- Cast PCS, RATE, and GROSS AMT to proper NUMERIC/INTEGER types
+
+### 2. Fact Table (`fact_sales_international`)
+Created a clean fact table containing:
+- sale_date  
+- customer  
+- sku  
+- size  
+- quantity  
+- rate  
+- gross_amount  
+
+### Output Tables
+- `finance.stg_international_sales`
+- `finance.fact_sales_international`
+
+### Notes
+This is the first fact table of the project.  
+Later steps will join this with:
+- `dim_product`  
+- `dim_customer`  
+- Possibly calendar dimension
