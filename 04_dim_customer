@@ -1,0 +1,23 @@
+# Customer Dimension
+
+This step creates a clean customer dimension from the *International sale report* dataset.
+
+## Objective
+- Extract unique customer names  
+- Clean text formatting  
+- Remove null/empty values  
+- Generate a surrogate primary key  
+
+## Process Summary
+1. **Staging Table (`stg_customer`)**
+   - Selected distinct customer names  
+   - Standardized formatting (UPPER/TRIM)  
+   - Removed blank rows  
+
+2. **Dimension Table (`dim_customer`)**
+   - Added a surrogate key (`customer_id`)  
+   - Mapped each unique customer to an integer ID  
+
+## Output Tables
+- `finance.stg_customer`
+- `finance.dim_customer`
