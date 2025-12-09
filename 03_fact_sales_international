@@ -37,3 +37,6 @@ Later steps will join this with:
 - `dim_product`  
 - `dim_customer`  
 - Possibly calendar dimension
+
+Updated fact table logic to use cleaned stg_international_sales
+(numeric extraction using regexp_replace instead of hard filtering).
