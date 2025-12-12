@@ -1,42 +1,91 @@
-# International Sales Fact Table
-
-This step focuses on transforming the raw *International sale report* dataset into a clean fact table for analysis.
+# International Sales Fact Table (`fact_sales_international`)
 
 ## Objective
-- Standardize date, SKU, size, and customer fields  
-- Convert PCS, RATE, and GROSS AMT into numeric types  
-- Remove invalid or non-numeric rows  
-- Prepare the data for joining with dimensions (product, customer)
+Create a clean and reliable fact table representing international sales transactions,
+suitable for analytical querying and downstream feature engineering.
 
-## Process Summary
+This table standardizes raw international sales data and resolves initial data import
+and column mismatch issues.
+
+---
+
+## Source Table
+- `international_sales_report`
+
+---
+
+## Grain
+**One row per SKU per transaction line**
+
+Each record represents a single international sales line with quantity and monetary values.
+
+---
+
+## Key Transformations
 
 ### 1. Staging Table (`stg_international_sales`)
-Performed the following transformations:
-- Converted `DATE` to SQL `DATE` type  
-- Cleaned & standardized text fields (SKU, customer, size)  
-- Filtered valid numeric rows  
-- Cast PCS, RATE, and GROSS AMT to proper NUMERIC/INTEGER types
+A staging layer was used to clean and normalize raw data before materializing the fact table.
+
+Transformations applied:
+- Validated and cast `sale_date` to SQL `DATE`
+- Standardized `sku`, `customer`, and `size` using trimming and uppercasing
+- Extracted numeric values from text fields using `regexp_replace`
+- Converted:
+  - `pcs` → `INTEGER` (`quantity`)
+  - `rate`, `gross_amt` → `NUMERIC`
+- Filtered out rows with null or invalid SKUs
+
+---
 
 ### 2. Fact Table (`fact_sales_international`)
-Created a clean fact table containing:
-- sale_date  
-- customer  
-- sku  
-- size  
-- quantity  
-- rate  
-- gross_amount  
+The final fact table was created from the cleaned staging data and contains only valid,
+analysis-ready records.
 
-### Output Tables
+---
+
+## Output Tables
 - `finance.stg_international_sales`
 - `finance.fact_sales_international`
 
-### Notes
-This is the first fact table of the project.  
-Later steps will join this with:
-- `dim_product`  
-- `dim_customer`  
-- Possibly calendar dimension
+---
 
-Updated fact table logic to use cleaned stg_international_sales
-(numeric extraction using regexp_replace instead of hard filtering).
+## Fact Table Schema
+`finance.fact_sales_international`
+
+Columns:
+- `sale_date` — transaction date
+- `customer` — customer name
+- `sku` — product SKU
+- `size` — product size
+- `quantity` — units sold
+- `rate` — unit price
+- `gross_amount` — total line revenue
+
+---
+
+## Data Validation
+- Row counts validated between staging and fact tables
+- Confirmed non-null SKU values
+- Verified numeric columns contain valid numeric data
+
+---
+
+## Usage
+This fact table is used to:
+- Analyze international sales volume and revenue
+- Join logically with `dim_product` using `sku`
+- Support future customer-level aggregations
+- Serve as input for analytics and machine learning feature datasets
+
+---
+
+## Notes
+The international sales fact table was recreated after correcting raw data imports
+and column mismatches. This documentation reflects the **final, validated schema
+and transformation logic**.
+
+---
+
+## Status
+**Final and stable**
+
