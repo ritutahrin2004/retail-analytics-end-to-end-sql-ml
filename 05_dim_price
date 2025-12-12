@@ -1,0 +1,111 @@
+# Price Dimension (`dim_price`)
+
+## Objective
+Create a unified pricing dimension by consolidating multiple pricing snapshots into a
+standardized structure suitable for analysis, comparison, and downstream feature engineering.
+
+This table provides historical and channel-specific pricing context for products without
+enforcing strict foreign key constraints.
+
+---
+
+## Source Tables
+- `pl_march_2021`
+- `may_2022`
+
+Each source represents a pricing snapshot from a different time period.
+
+---
+
+## Grain
+**One row per SKU per pricing snapshot**
+
+Each record represents the price attributes of a SKU at a specific point in time.
+
+---
+
+## Key Challenges
+- Pricing data spread across multiple source tables
+- Inconsistent TP columns (`tp_1`, `tp_2`, `tp`)
+- Pricing snapshots captured at different dates
+- No reliable foreign key relationship to the product dimension
+
+---
+
+## Data Modeling Decisions
+- Pricing data modeled as a standalone dimension
+- Canonical TP value derived using `COALESCE(tp_2, tp_1, tp)`
+- `snapshot_date` added to preserve temporal pricing context
+- `source` column retained to track pricing origin
+- No enforced foreign keys to avoid invalid or lossy joins
+
+---
+
+## Data Transformation Process
+
+### 1. Staging Table (`stg_price`)
+Pricing data from all sources was first normalized into a staging table.
+
+Transformations applied:
+- Standardized `sku` values using trimming and uppercasing
+- Aligned pricing columns across sources
+- Added `snapshot_date` for each pricing source
+- Added `source` identifier for traceability
+
+---
+
+### 2. Price Dimension (`dim_price`)
+The final price dimension was created from the staging table using standardized pricing logic.
+
+Canonical TP calculation:
+- `tp = COALESCE(tp_2, tp_1, tp)`
+
+---
+
+## Output Tables
+- `finance.stg_price`
+- `finance.dim_price`
+
+---
+
+## Dimension Table Schema
+`finance.dim_price`
+
+Columns:
+- `price_id` — surrogate primary key
+- `sku` — product SKU
+- `style_id` — style identifier
+- `category` — product category
+- `weight` — product weight
+- `tp` — standardized transfer price
+- `amazon_mrp` — listed Amazon MRP
+- `snapshot_date` — pricing snapshot date
+- `source` — pricing data source
+
+---
+
+## Data Validation
+- Verified non-null SKU values
+- Confirmed correct TP derivation logic
+- Validated snapshot dates by source
+- Checked numeric fields for valid numeric data
+
+---
+
+## Usage
+This dimension is used to:
+- Provide pricing context for sales fact tables
+- Compare pricing across time and channels
+- Support margin analysis and price anomaly detection
+- Serve as an input for analytics and machine learning feature datasets
+
+---
+
+## Notes
+The price dimension is intentionally modeled independently from the product dimension
+to avoid invalid joins caused by inconsistent historical pricing data.
+
+---
+
+## Status
+**Final and stable**
