@@ -1,23 +1,99 @@
-# Customer Dimension
-
-This step creates a clean customer dimension from the *International sale report* dataset.
+# Customer Dimension (`dim_customer`)
 
 ## Objective
-- Extract unique customer names  
-- Clean text formatting  
-- Remove null/empty values  
-- Generate a surrogate primary key  
+Create a minimal and stable customer dimension to support customer-level analysis
+and downstream aggregation from international sales data.
 
-## Process Summary
-1. **Staging Table (`stg_customer`)**
-   - Selected distinct customer names  
-   - Standardized formatting (UPPER/TRIM)  
-   - Removed blank rows  
+This dimension standardizes customer identifiers and provides a consistent reference
+for joining with sales fact tables.
 
-2. **Dimension Table (`dim_customer`)**
-   - Added a surrogate key (`customer_id`)  
-   - Mapped each unique customer to an integer ID  
+---
+
+## Source Table
+- `fact_sales_international`
+
+The customer dimension is derived exclusively from validated international sales data.
+
+---
+
+## Grain
+**One row per unique customer**
+
+Each record represents a distinct customer name observed in international sales transactions.
+
+---
+
+## Design Scope
+This dimension is intentionally kept minimal to avoid over-modeling.
+
+Included:
+- Standardized customer identifier
+- Surrogate customer key
+
+Excluded:
+- Address or geographic attributes
+- Demographic assumptions
+- Channel-specific attributes
+
+These may be introduced later if reliable data becomes available.
+
+---
+
+## Data Transformation Process
+
+### 1. Staging Table (`stg_customer`)
+Customer names were extracted and standardized before creating the final dimension.
+
+Transformations applied:
+- Trimmed whitespace
+- Converted customer names to uppercase
+- Removed null or empty values
+- Deduplicated customer records
+
+---
+
+### 2. Customer Dimension (`dim_customer`)
+The final customer dimension was created from the staging table using a surrogate key.
+
+---
 
 ## Output Tables
 - `finance.stg_customer`
 - `finance.dim_customer`
+
+---
+
+## Dimension Table Schema
+`finance.dim_customer`
+
+Columns:
+- `customer_id` — surrogate primary key
+- `customer_name` — standardized customer name
+
+---
+
+## Data Validation
+- Verified uniqueness of customer names
+- Confirmed non-null customer values
+- Validated row counts against distinct customers in the fact table
+
+---
+
+## Usage
+This dimension is used to:
+- Support customer-level aggregations
+- Join with `fact_sales_international`
+- Enable future customer analytics and segmentation
+- Serve as a foundation for extending customer data when additional sources are introduced
+
+---
+
+## Notes
+The customer dimension was rebuilt after re-importing raw data and recreating fact tables.
+This documentation reflects the final, validated structure derived from international sales data.
+
+---
+
+## Status
+**Final and stable**
+
