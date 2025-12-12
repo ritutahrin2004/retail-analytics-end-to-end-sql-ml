@@ -109,3 +109,7 @@ to avoid invalid joins caused by inconsistent historical pricing data.
 
 ## Status
 **Final and stable**
+
+## --- Pricing SKUs do not align with sales SKUs in the available data.
+As a result, pricing data is analyzed independently and not merged
+into the SKU-level analytics mart.
