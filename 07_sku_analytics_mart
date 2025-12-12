@@ -1,0 +1,104 @@
+# SKU Analytics Mart (`sku_analytics_mart`)
+
+## Objective
+Provide a consolidated, SKU-level analytical dataset combining product attributes
+and aggregated sales performance across international and Amazon channels.
+
+This table serves as the primary analytical layer for exploratory data analysis
+and machine learning feature generation.
+
+---
+
+## Source Tables
+- `dim_product`
+- `fact_sales_international` (aggregated)
+- `fact_sales_amazon` (aggregated)
+
+---
+
+## Grain
+**One row per SKU**
+
+Each record represents a single product SKU with summarized sales metrics
+across multiple sales channels.
+
+---
+
+## Data Preparation Process
+
+### 1. Aggregated Sales Metrics
+Transactional fact tables were first aggregated to SKU level.
+
+- International sales:
+  - total units sold
+  - total revenue
+  - average selling price
+
+- Amazon sales:
+  - total units sold
+  - total revenue
+  - average selling price
+
+---
+
+### 2. Analytics Mart Creation
+The aggregated sales metrics were joined with the product dimension to create
+a single, analysis-ready dataset.
+
+Only left joins were used to ensure full product coverage, even for SKUs that
+did not sell in one or more channels.
+
+---
+
+## Output Table
+- `finance.sku_analytics_mart`
+
+---
+
+## Table Schema
+`finance.sku_analytics_mart`
+
+Columns:
+- `product_id` — surrogate product key
+- `sku` — product SKU
+- `design_no` — design identifier
+- `category` — product category
+- `size` — product size
+- `color` — product color
+
+- `intl_units_sold` — total international units sold
+- `intl_revenue` — total international revenue
+- `intl_avg_price` — average international selling price
+
+- `amazon_units_sold` — total Amazon units sold
+- `amazon_revenue` — total Amazon revenue
+- `amazon_avg_price` — average Amazon selling price
+
+---
+
+## Data Validation
+- Verified one-row-per-SKU grain
+- Confirmed no duplicate SKUs
+- Validated aggregated metrics against source fact tables
+- Ensured null values correctly represent lack of sales in a channel
+
+---
+
+## Usage
+This analytics mart is used to:
+- Perform SKU-level exploratory data analysis
+- Compare sales performance across channels
+- Serve as the base dataset for machine learning feature engineering
+- Support demand forecasting and SKU segmentation tasks
+
+---
+
+## Notes
+Pricing data is intentionally excluded from this mart because SKU identifiers
+in the pricing sources do not align with sales SKUs. Pricing analysis is therefore
+performed independently to avoid invalid or misleading joins.
+
+---
+
+## Status
+**Final and stable**
