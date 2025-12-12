@@ -1,0 +1,87 @@
+# Amazon Sales Fact Table (`fact_sales_amazon`)
+
+## Objective
+Create a clean and reliable fact table representing Amazon sales transactions,
+structured for analytical querying and downstream feature engineering.
+
+This table captures order-line–level Amazon sales data after standardizing
+raw transactional fields.
+
+---
+
+## Source Table
+- `amazon_sales_report`
+
+---
+
+## Grain
+**One row per order line per SKU**
+
+Each record represents a single SKU within an Amazon order.
+
+---
+
+## Key Transformations
+
+### 1. Staging Table (`stg_amazon_sales`)
+A staging layer was used to clean and normalize raw Amazon sales data.
+
+Transformations applied:
+- Validated and cast `order_date` to SQL `DATE`
+- Standardized `sku` using trimming and uppercasing
+- Extracted numeric values from text-based quantity and price fields
+- Converted:
+  - `quantity` → `INTEGER`
+  - `item_price` → `NUMERIC`
+- Standardized categorical fields (order status, fulfillment channel)
+- Cleaned shipping location fields (city, state, country)
+
+---
+
+### 2. Fact Table (`fact_sales_amazon`)
+The final fact table was materialized from the staging table by filtering
+invalid or incomplete records.
+
+---
+
+## Output Tables
+- `finance.stg_amazon_sales`
+- `finance.fact_sales_amazon`
+
+---
+
+## Fact Table Schema
+`finance.fact_sales_amazon`
+
+Columns:
+- `order_date` — order date
+- `order_id` — Amazon order identifier
+- `sku` — product SKU
+- `quantity` — units sold
+- `sales_amount` — line revenue
+- `order_status` — order status
+- `fulfillment_channel` — fulfillment method
+- `ship_city` — shipping city
+- `ship_state` — shipping state
+- `ship_country` — shipping country
+
+---
+
+## Data Validation
+- Verified non-null `order_id` and `sku`
+- Confirmed numeric integrity of quantity and sales fields
+- Validated row counts against staging data
+
+---
+
+## Usage
+This fact table is used to:
+- Analyze Amazon sales volume and revenue
+- Join logically with `dim_product` using `sku`
+- Compare Amazon and international sales channels
+- Serve as input for analytics and machine learning feature datasets
+
+---
+
+## Status
+**Final and stable**
