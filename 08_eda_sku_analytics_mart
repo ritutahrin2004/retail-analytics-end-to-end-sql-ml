@@ -1,0 +1,112 @@
+# SKU Analytics Mart — Exploratory Data Analysis (EDA)
+
+This repository contains the exploratory data analysis (EDA) for a SKU-level analytics mart built using PostgreSQL and Python. The goal of this work is to validate data quality, understand sales behavior across channels, and establish a solid analytical foundation before moving into machine learning.
+
+The focus of this project is correctness, reproducibility, and analytical discipline rather than premature modeling.
+
+---
+
+## Project Context
+
+The analytics mart consolidates product attributes with aggregated sales performance across Amazon and International sales channels. Each row in the dataset represents a single SKU, combining static product information with channel-level sales metrics.
+
+This EDA was conducted after rebuilding the full data pipeline from raw CSV imports to fact and dimension tables in PostgreSQL.
+
+---
+
+## Data Pipeline
+
+The analytics mart is created under the `finance` schema in PostgreSQL using the following pipeline:
+
+Raw Tables → Staging Tables → Fact Tables → Aggregations → SKU Analytics Mart
+
+The final table used for analysis is:
+
+finance.sku_analytics_mart
+
+This table serves as the master dataset for both exploratory analysis and downstream machine learning.
+
+---
+
+## Notebook
+
+The analysis is performed in the following notebook:
+
+01_eda_sku_analytics_mart.ipynb
+
+This notebook includes:
+- Dataset validation and schema inspection
+- Missing value analysis and handling of structural nulls
+- Sales coverage analysis by channel
+- Distribution analysis of units sold and revenue
+- Long-tail revenue concentration analysis
+- Category-level performance analysis
+- Channel mix and cross-channel performance comparison
+- A final EDA summary with modeling direction
+
+EDA and machine learning are intentionally separated into different notebooks to maintain clarity and analytical rigor.
+
+---
+
+## Local CSV Dependency
+
+The notebook loads the analytics mart from a locally exported CSV file:
+
+df = pd.read_csv("E:/sku_analytics_mart.csv")
+
+This design choice is intentional:
+- All data modeling and transformations are handled in PostgreSQL
+- The CSV represents a snapshot exported from the database
+- The notebook focuses on analysis, not database connectivity
+
+### Reproducing the Analysis
+
+To reproduce the EDA:
+1. Run the SQL scripts in this repository to create `finance.sku_analytics_mart`
+2. Export the table to CSV from PostgreSQL
+3. Either place the CSV at `E:/sku_analytics_mart.csv` or update the file path in the notebook to match your local environment
+
+---
+
+## Key EDA Findings
+
+- The dataset contains 9,184 unique SKUs
+- Approximately 80% of SKUs recorded sales in at least one channel
+- Amazon has broader SKU coverage than international sales
+- Sales and revenue distributions exhibit strong long-tail behavior
+- A small percentage of SKUs drive the majority of revenue
+- SKUs selling in both channels significantly outperform single-channel SKUs
+- Category performance and channel mix vary meaningfully and should not be treated uniformly
+
+---
+
+## Modeling Direction
+
+Based on the EDA results:
+- The aggregated SKU-level dataset is well-suited for SKU segmentation (clustering)
+- Classification tasks (e.g., predicting single-channel vs both-channel SKUs) are also viable
+- Time-series demand forecasting is not appropriate given the current data grain
+
+Machine learning will be implemented in a separate notebook using the validated insights from this EDA.
+
+---
+
+## Project Status
+
+- Data warehouse rebuilt and validated
+- SKU analytics mart recreated reproducibly
+- Exploratory data analysis completed and documented
+- Ready to proceed with machine learning
+
+---
+
+## Tech Stack
+
+- PostgreSQL (schema design, transformations, aggregations)
+- Python (pandas, matplotlib)
+- Jupyter Notebook
+- GitHub for version control and documentation
+
+---
+
+This project prioritizes reproducibility, transparency, and sound analytical reasoning over shortcuts or surface-level results.
