@@ -1,0 +1,113 @@
+# 📊 Power BI Dashboard Overview  
+**SKU Performance & Channel Segmentation**
+
+This document explains how to read and interpret the Power BI executive dashboard provided in PDF format:
+
+👉 [`powerbi/sku_performance_channel_segmentation_dashboard.pdf`](./powerbi/sku_performance_channel_segmentation_dashboard.pdf)
+
+The dashboard is designed as a **single-page, decision-ready view** for understanding SKU performance across Amazon and International sales channels.
+
+---
+
+## 1. Top KPI Section
+
+The top row provides an immediate portfolio-level summary:
+
+- **Total Revenue** – Combined Amazon and International revenue across all SKUs
+- **Total Units** – Total units sold across channels
+- **% Cross-channel SKUs** – Share of SKUs selling in both Amazon and International channels
+- **Active SKUs** – Total number of SKUs with at least one sale
+
+These KPIs answer: *How large is the business, and how diversified is it across channels?*
+
+---
+
+## 2. SKU Distribution by Cluster
+
+This chart shows the **count of SKUs** in each performance cluster:
+
+- Amazon-focused SKUs  
+- International-heavy SKUs  
+- High-performing cross-channel SKUs  
+
+It highlights how the SKU portfolio is structurally distributed across different performance segments.
+
+---
+
+## 3. Revenue Concentration by Cluster
+
+This chart shows **total revenue contribution** by cluster.
+
+Key takeaway:
+- A smaller number of **high-performing cross-channel SKUs** contribute a disproportionate share of total revenue.
+
+This visual reinforces the **Pareto effect** observed during EDA.
+
+---
+
+## 4. Channel Revenue by Cluster
+
+This chart compares **Amazon vs International revenue** within each cluster.
+
+It helps answer:
+- Which clusters are Amazon-dependent?
+- Which clusters are driven by International demand?
+- Where cross-channel balance exists?
+
+This is useful for channel expansion and prioritization decisions.
+
+---
+
+## 5. Category × Cluster Revenue Matrix
+
+This matrix breaks down **revenue by product category and cluster**.
+
+It is used to:
+- Identify categories overrepresented in high-performing clusters
+- Spot categories concentrated in low-impact SKUs
+
+This supports **assortment rationalization and category strategy**.
+
+---
+
+## 6. SKU Action Table (Decision Layer)
+
+The bottom table is the most actionable component of the dashboard.
+
+For each SKU, it shows:
+- Amazon revenue and units
+- International revenue and units
+- Total revenue and total units
+- Cluster assignment
+- **SKU Portfolio Tier (Top 20% vs Bottom 80%)**
+
+### Top 20% Highlighting
+SKUs in the **Top 20% revenue tier** are highlighted in green to clearly identify:
+- Primary revenue drivers
+- SKUs that should be prioritized for inventory, pricing, and expansion
+
+This table is designed for **direct operational decision-making**, not exploration.
+
+---
+
+## 7. Filters & Interactivity
+
+Available slicers:
+- **Category**
+- **Cluster label**
+
+These allow focused analysis without altering the global portfolio logic (e.g., Top 20% classification remains stable).
+
+---
+
+## Final Note
+
+This dashboard is intentionally:
+- Single-page
+- Aggregated at SKU level
+- Focused on decisions rather than trends
+
+It complements the deeper analysis documented in:
+- `EXECUTIVE_STORY.md`
+- Python EDA and ML notebooks
+
