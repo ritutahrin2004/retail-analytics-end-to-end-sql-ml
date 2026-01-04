@@ -12,6 +12,8 @@ If you want a quick, high-level understanding of this project, start here:
 - 📊 **Power BI Executive Dashboard (PDF)**  
   → [`powerbi/sku_performance_channel_segmentation_dashboard.pdf`](./powerbi/sku_performance_channel_segmentation_dashboard.pdf)
 
+- 📘 **Dashboard Guide:** [`DASHBOARD_OVERVIEW.md`](./DASHBOARD_OVERVIEW.md)
+
 - 📈 **Exploratory Data Analysis (Python)**  
   → `python/01_eda_sku_analytics_mart.ipynb`
 
